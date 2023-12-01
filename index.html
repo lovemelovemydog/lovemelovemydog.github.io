@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WKWebView交互</title>
+</head>
+<body>
+<button onclick="mLoadingSuc()">h5加载完成通知</button><br/><br/>
+<button onclick="mSafari()">微信支付、支付宝支付（跳转到safari）</button><br/><br/>
+<button onclick="mDeviceInfo()">获取idfa、设备信息</button><br/><br/>
+<button onclick="mRotate_landscape()">切换为横屏</button><br/><br/>
+<button onclick="mRotate_portrait()">切换为竖屏</button><br/><br/>
+<script>
+
+    /**
+     *  交互事件是为了扩展需要。所有不需要的事件都可以不接入
+     *
+     *  这里的callback是创建WKWebViewConfiguration时定义的
+     *  window.webkit.messageHandlers.callback.postMessage(json)
+     *  对应ios代码：configuration.userContentController.add(self, name: "callback")
+     *
+     */
+
+
+
+    /**
+     * 1、h5加载完成通知app
+     *
+     * 说明：
+     * 默认不使用，因为需要h5做支持。
+     *
+     * 如果不需要可以不使用。app加载h5，app端会有一个loading的样式
+     * 因为wkwebview本身也能监听h5加载完成，但是还会出现白屏问题，尤其是h5资源慢的时候。
+     * 使用h5自身控制，等h5资源加载完成后，h5主动通知app，app再关闭客户端的loading，可以完美解决白屏或黑屏问题
+     * json:
+     * {
+     * "m":"mLoadingSuc"
+     * }
+     */
+    function mLoadingSuc() {
+        alert("mLoadingSuc")
+        // 对应ios代码：configuration.userContentController.add(self, name: "callback")
+        var json = '{"m":"mLoadingSuc"}'
+        // 这里的callback是创建WKWebViewConfiguration时定义的
+        window.webkit.messageHandlers.callback.postMessage(json)
+    }
+
+
+    /**
+     * 2、微信支付  支付宝支付 通过跳转到外部浏览器打开
+     * json:
+     * {
+     * "m":"mSafari",
+     * "url":"https://www.baidu.com/"
+     * }
+     */
+    function mSafari() {
+        alert("mSafari")
+        var url = "https://www.baidu.com/";
+        var json = '{"m":"mSafari","url":"{url}"}'.replace("{url}", url)
+        alert(json)
+        window.webkit.messageHandlers.callback.postMessage(json)
+    }
+
+
+    /**
+     * 3、获取设备信息 idfa 设备型号等
+     * 有回调
+     * json:
+     * {
+     * "m":"mDeviceInfo"
+     * }
+     *
+     * 回调：
+     * invokJS
+     * {
+     * "m":"mDeviceInfo",
+     * "idfa":"xxx-xxx-xxx",
+     * "pkg":"com.ios.xxx.xxx",
+     * "info":"17.0,iphone 14" //系统是17.0，手机是iphone 14
+     * }
+     */
+    function mDeviceInfo() {
+        alert("getDeviceInfo")
+        var json = getDeviceInfoJson ()
+        window.webkit.messageHandlers.callback.postMessage(json)
+    }
+
+    /**
+     * app调用js的方法 统一回调
+     *
+     * mDeviceInfo
+     * {
+     * "m":"mDeviceInfo",
+     * "idfa":"xxx-xxx-xxx",
+     * "pkg":"com.ios.xxx.xxx",
+     * "info":"17.0,iphone 14" //系统是17.0，手机是iphone 14
+     * }
+     */
+    function invokJS(json) {
+        alert(JSON.stringify(json))
+        var obj = JSON.stringify(json)
+        if (obj.m == "mDeviceInfo") {
+
+        }
+    }
+
+    /**
+     * 4、app旋转屏幕
+     * json:
+     * {
+     * "m":"mRotate",
+     * "type":"landscape" //portrait：表示竖屏
+     * }
+     */
+    function mRotate_landscape() {
+        alert("mRotate_landscape")
+        // 对应ios代码：configuration.userContentController.add(self, name: "callback")
+        var json = '{"m":"mRotate","type":"landscape"}'
+        // 这里的callback是创建WKWebViewConfiguration时定义的
+        window.webkit.messageHandlers.callback.postMessage(json)
+    }
+
+    function mRotate_portrait() {
+        alert("mRotate_portrait")
+        // 对应ios代码：configuration.userContentController.add(self, name: "callback")
+        var json = '{"m":"mRotate","type":"portrait"}'
+        // 这里的callback是创建WKWebViewConfiguration时定义的
+        window.webkit.messageHandlers.callback.postMessage(json)
+    }
+
+
+</script>
+
+</body>
+</html>
