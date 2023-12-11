@@ -94,7 +94,7 @@
      */
     function mDeviceInfo() {
         alert("mDeviceInfo")
-        var json = getDeviceInfoJson()
+        var json = '{"m":"mDeviceInfo"}'
         window.webkit.messageHandlers.callback.postMessage(json)
     }
 
@@ -110,10 +110,11 @@
      * }
      */
     function invokJS(json) {
+        alert("invokJS")
         alert(JSON.stringify(json))
         var obj = JSON.stringify(json)
         if (obj.m == "mDeviceInfo") {
-            //收到设备信息
+            //收到设备信息 保存到数据库
 
         }
     }
