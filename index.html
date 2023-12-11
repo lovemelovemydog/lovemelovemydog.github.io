@@ -5,12 +5,24 @@
     <title>WKWebView交互</title>
 </head>
 <body>
-<button onclick="mLoadingSuc()">h5加载完成通知，默认不配置</button><br/><br/>
-<button onclick="mSafari()">微信支付、支付宝支付（跳转到safari）</button><br/><br/>
-<button onclick="mDeviceInfo()">获取idfa、设备信息</button><br/><br/>
-<button onclick="mRotate_landscape()">切换为横屏</button><br/><br/>
-<button onclick="mRotate_portrait()">切换为竖屏</button><br/><br/>
-<button onclick="mShare()">分享App</button><br/><br/>
+<center>
+
+    <br/><br/><br/><br/><br/><br/>
+
+    <button onclick="mLoadingSuc()" style="font-size: x-large">h5加载完成通知，默认不配置</button>
+    <br/><br/><br/>
+    <button onclick="mSafari()" style="font-size: x-large">微信支付、支付宝支付（跳转到safari）</button>
+    <br/><br/><br/>
+    <button onclick="mDeviceInfo()" style="font-size: x-large">获取idfa、设备信息</button>
+    <br/><br/><br/>
+    <button onclick="mRotate_landscape()" style="font-size: x-large">切换为横屏</button>
+    <br/><br/><br/>
+    <button onclick="mRotate_portrait()" style="font-size: x-large">切换为竖屏</button>
+    <br/><br/><br/>
+    <button onclick="mShare()" style="font-size: x-large">分享App</button>
+    <br/><br/>
+
+</center>
 <script>
 
     /**
@@ -21,7 +33,6 @@
      *  对应ios代码：configuration.userContentController.add(self, name: "callback")
      *
      */
-
 
 
     /**
@@ -83,7 +94,7 @@
      */
     function mDeviceInfo() {
         alert("mDeviceInfo")
-        var json = getDeviceInfoJson ()
+        var json = getDeviceInfoJson()
         window.webkit.messageHandlers.callback.postMessage(json)
     }
 
