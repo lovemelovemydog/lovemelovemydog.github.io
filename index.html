@@ -5,11 +5,12 @@
     <title>WKWebView交互</title>
 </head>
 <body>
-<button onclick="mLoadingSuc()">h5加载完成通知</button><br/><br/>
+<button onclick="mLoadingSuc()">h5加载完成通知，默认不配置</button><br/><br/>
 <button onclick="mSafari()">微信支付、支付宝支付（跳转到safari）</button><br/><br/>
 <button onclick="mDeviceInfo()">获取idfa、设备信息</button><br/><br/>
 <button onclick="mRotate_landscape()">切换为横屏</button><br/><br/>
 <button onclick="mRotate_portrait()">切换为竖屏</button><br/><br/>
+<button onclick="mShare()">分享App</button><br/><br/>
 <script>
 
     /**
@@ -27,7 +28,7 @@
      * 1、h5加载完成通知app
      *
      * 说明：
-     * 默认不使用，因为需要h5做支持。
+     * 默认不使用，因为需要h5主动调用支持。
      *
      * 如果不需要可以不使用。app加载h5，app端会有一个loading的样式
      * 因为wkwebview本身也能监听h5加载完成，但是还会出现白屏问题，尤其是h5资源慢的时候。
@@ -75,13 +76,13 @@
      * invokJS
      * {
      * "m":"mDeviceInfo",
-     * "idfa":"xxx-xxx-xxx",
+     * "idfa":"xxx-xxx-xxx", //idfa需要授权。如果收到的idfa是CUS-开头就是自定义的，不是真实的
      * "pkg":"com.ios.xxx.xxx",
      * "info":"17.0,iphone 14" //系统是17.0，手机是iphone 14
      * }
      */
     function mDeviceInfo() {
-        alert("getDeviceInfo")
+        alert("mDeviceInfo")
         var json = getDeviceInfoJson ()
         window.webkit.messageHandlers.callback.postMessage(json)
     }
@@ -101,6 +102,7 @@
         alert(JSON.stringify(json))
         var obj = JSON.stringify(json)
         if (obj.m == "mDeviceInfo") {
+            //收到设备信息
 
         }
     }
@@ -114,7 +116,7 @@
      * }
      */
     function mRotate_landscape() {
-        alert("mRotate_landscape")
+        alert("mRotate type=landscape")
         // 对应ios代码：configuration.userContentController.add(self, name: "callback")
         var json = '{"m":"mRotate","type":"landscape"}'
         // 这里的callback是创建WKWebViewConfiguration时定义的
@@ -122,7 +124,7 @@
     }
 
     function mRotate_portrait() {
-        alert("mRotate_portrait")
+        alert("mRotate type=portrait")
         // 对应ios代码：configuration.userContentController.add(self, name: "callback")
         var json = '{"m":"mRotate","type":"portrait"}'
         // 这里的callback是创建WKWebViewConfiguration时定义的
@@ -130,6 +132,22 @@
     }
 
 
+    /**
+     * 5、分享app
+     * json:
+     * {
+     * "m":"mShare",
+     * "title":"xxxx"
+     * "url":""
+     * }
+     */
+    function mShare() {
+        alert("mShare")
+        // 对应ios代码：configuration.userContentController.add(self, name: "callback")
+        var json = '{"m":"mShare","title":"快来使用这款app特有趣","url":"https://apps.apple.com/cn/app/%E7%8E%8B%E8%80%85%E8%8D%A3%E8%80%80/id989673964"}'
+        // 这里的callback是创建WKWebViewConfiguration时定义的
+        window.webkit.messageHandlers.callback.postMessage(json)
+    }
 </script>
 
 </body>
